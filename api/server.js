@@ -55,4 +55,17 @@ app.use("/api/posts", postRoute);
 app.use("/api/conversations", conversationRoute);
 app.use("/api/messages", messageRoute);
 
+__dirname = path.resolve();
+
+// Serve static files only in production
+if (process.env.NODE_ENV === "production") {
+  // Set static folder to serve from the client/build directory
+  app.use(express.static(path.join(__dirname, "../client/build")));
+
+  // Serve the index.html file for any route
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+  });
+}
+
 app.listen(process.env.PORT || 5000 , () => console.log("Server is Running..."));
